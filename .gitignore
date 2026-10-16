@@ -1,0 +1,5 @@
+focus_data.json
+.venv/
+venv/
+__pycache__/
+*.pyc
