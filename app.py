@@ -390,18 +390,169 @@ st.dataframe(
     hide_index=True
 )
 
-# Encouragement
+# ----------------------------------
+# ADVANCED PRODUCTIVITY INSIGHTS
+# ----------------------------------
+
+st.divider()
+st.header("🚀 Advanced Productivity Insights")
+
+# 1. Most Productive Day
 if total_hours > 0:
+
+    best_day_index = df["Study Hours"].idxmax()
+    best_day = df.loc[best_day_index, "Day"]
+    best_hours = df.loc[best_day_index, "Study Hours"]
+
+    st.subheader("🏆 Most Productive Day")
+
     st.success(
-        f"You studied for {total_hours:.1f} hours this week. "
-        "Keep building your habits!"
+        f"Your most productive day was {best_day}, "
+        f"with {best_hours:.1f} hours of study."
     )
+
 else:
     st.info(
-        "Your weekly chart is ready! "
-        "Record your study hours each day to see your progress."
+        "Start recording your study hours to discover "
+        "your most productive day."
+    )
+
+
+# 2. Study Consistency Score
+st.subheader("🔥 Study Consistency")
+
+consistency_score = (days_goal_achieved / 7) * 100
+
+st.metric(
+    "Study Goal Consistency",
+    f"{consistency_score:.1f}%"
+)
+
+st.progress(consistency_score / 100)
+
+if consistency_score >= 80:
+    st.success("Fantastic consistency! Keep up the great work! 🌟")
+
+elif consistency_score >= 50:
+    st.info("Good progress! Try to achieve your goal on more days.")
+
+else:
+    st.info(
+        "Build a regular study routine. Start with small, "
+        "achievable daily goals."
+    )
+
+
+# 3. Productivity Trend
+st.subheader("📈 Productivity Trend")
+
+first_half = df.iloc[:3]["Study Hours"].mean()
+second_half = df.iloc[4:]["Study Hours"].mean()
+
+if second_half > first_half:
+    st.success(
+        "Your average study hours increased in the later "
+        "part of the week. Keep going! 📈"
+    )
+
+elif second_half < first_half:
+    st.info(
+        "Your average study hours decreased in the later "
+        "part of the week. Consider planning your time "
+        "more carefully."
+    )
+
+else:
+    st.info(
+        "Your study hours remained approximately stable "
+        "across the two parts of the week."
+    )
+
+
+# 4. Personalized Recommendations
+st.subheader("💡 Your Productivity Recommendations")
+
+if total_hours == 0:
+
+    st.write(
+        "📚 Record your daily study hours to receive "
+        "personalized productivity insights."
+    )
+
+else:
+
+    if daily_average < 2:
+        st.write(
+            "📖 **Study routine:** Try starting with "
+            "two focused study hours per day."
+        )
+
+    else:
+        st.write(
+            "👏 **Study routine:** Your daily average is "
+            f"{daily_average:.1f} hours. Keep maintaining "
+            "a consistent schedule."
+        )
+
+    if goal_percentage < 50:
+        st.write(
+            "🎯 **Goal setting:** Try smaller daily goals "
+            "that fit your college timetable."
+        )
+
+    else:
+        st.write(
+            "✅ **Goal setting:** You're achieving your "
+            "goals regularly. Keep challenging yourself "
+            "with realistic targets."
+        )
+
+    if total_tasks > 0:
+
+        task_completion_rate = (
+            completed_tasks / total_tasks
+        ) * 100
+
+        st.write(
+            f"📋 **Task completion:** You've completed "
+            f"{task_completion_rate:.1f}% of your recorded "
+            "tasks this week."
+        )
+
+    else:
+        st.write(
+            "📋 **Task management:** Add daily tasks to "
+            "track your completion rate."
+        )
+
+
+# ----------------------------------
+# WEEKLY SUMMARY
+# ----------------------------------
+
+st.divider()
+st.header("📋 Your Weekly Summary")
+
+summary_col1, summary_col2, summary_col3 = st.columns(3)
+
+with summary_col1:
+    st.metric(
+        "Total Study Hours",
+        f"{total_hours:.1f} hrs"
+    )
+
+with summary_col2:
+    st.metric(
+        "Goals Achieved",
+        f"{days_goal_achieved}/7 days"
+    )
+
+with summary_col3:
+    st.metric(
+        "Tasks Completed",
+        f"{completed_tasks}/{total_tasks}"
     )
 
 st.caption(
-    "FocusTrack | Small steps lead to big achievements."
+    "FocusTrack | Small steps lead to big achievements. 🎯"
 )
